@@ -19,6 +19,7 @@ export type NavItem = {
 	url: string;
 	icon?: ComponentType<SvelteComponent>;
 	isActive?: boolean;
+	description?: string;
 	items?: Array<{
 		title: string;
 		url: string;
@@ -31,12 +32,43 @@ export type UserData = {
 	avatar: string;
 };
 
+export type Workspace = {
+	id: string;
+	name: string;
+	logo: string;
+	url: string;
+	isActive?: boolean;
+};
+
 export const sidebarData = {
 	user: {
-		name: 'Broadcaster',
-		email: 'user@docket.tv',
+		name: 'Nan Kohler',
+		email: 'nan@gristandtoll.com',
 		avatar: '/avatars/default-avatar.jpg'
 	} as UserData,
+	workspaces: [
+		{
+			id: 'grist-and-toll',
+			name: 'Grist & Toll',
+			logo: 'https://turtle-commerce.pockethost.io/api/files/oqyn1qmsatdm53w/phwvuxr87m2x8m2/group_5_DZDQTT6EPX.png?token=',
+			url: '/workspace/dashboard',
+			isActive: true
+		},
+		{
+			id: 'docket-tv',
+			name: 'Docket.tv',
+			logo: 'https://turtle-commerce.pockethost.io/api/files/oqyn1qmsatdm53w/phwvuxr87m2x8m2/group_5_DZDQTT6EPX.png?token=',
+			url: '/workspace/dashboard',
+			isActive: false
+		},
+		{
+			id: 'community-media',
+			name: 'Community Media',
+			logo: 'https://turtle-commerce.pockethost.io/api/files/oqyn1qmsatdm53w/phwvuxr87m2x8m2/group_5_DZDQTT6EPX.png?token=',
+			url: '/workspace/dashboard',
+			isActive: false
+		}
+	] as Workspace[],
 	navMain: [
 		{
 			title: 'Dashboard',

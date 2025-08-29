@@ -21,5 +21,6 @@
 			<Button onclick={decrement} variant="destructive">-</Button>
 			<Button onclick={increment}>+</Button>
 		</div>
+		<a href="/workspace/dashboard" class="text-blue-500 hover:underline">Go to Dashboard</a>
 	</div>
 </div>

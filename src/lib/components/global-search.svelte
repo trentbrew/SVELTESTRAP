@@ -3,20 +3,15 @@
 	import SearchIcon from '@tabler/icons-svelte/icons/search';
 	import { sidebarData } from '$lib/data/sidebar-data';
 	import { page } from '$app/stores';
+	import type { NavItem } from '$lib/data/sidebar-data';
 
-	// Get all navigation items from sidebar data
-	const navItems = [
-		...sidebarData.navMain,
-		...sidebarData.navContent,
-		...sidebarData.navAnalytics,
-		...sidebarData.navSecondary
-	];
+	let { items }: { items: NavItem[] } = $props();
 
 	// Filter out items without a URL or with '#' as URL
-	const filteredNavItems = navItems.filter((item) => item.url && item.url !== '#');
+	const filteredNavItems = items.filter((item) => item.url && item.url !== '#');
 
 	// Add utility pages that might not be in the sidebar
-	const utilityPages = [
+	const utilityPages: Array<{ title: string; url: string; icon: string; description?: string }> = [
 		{ title: 'Documentation', url: '/docs', icon: 'file-text' },
 		{ title: 'Feedback', url: '/feedback', icon: 'message-circle' },
 		{ title: 'Sign Up', url: '/auth/signup', icon: 'user-plus' },
@@ -64,14 +59,14 @@
 <div class="p-2">
 	<button
 		type="button"
-		class="bg-background text-muted-foreground hover:bg-accent focus:ring-ring flex w-full items-center gap-2 rounded-md border px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-2"
+		class="flex w-full items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-accent focus:ring-2 focus:ring-ring focus:outline-none"
 		onclick={openDialog}
 		aria-label="Open global search"
 	>
 		<SearchIcon class="size-4 opacity-70" />
 		<span class="flex-1 text-left">Search or jump to...</span>
 		<kbd
-			class="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100"
+			class="pointer-events-none inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 select-none"
 		>
 			<span class="text-xs">⌘</span>K
 		</kbd>
@@ -94,12 +89,12 @@
 						onSelect={() => handleSelect(item.url)}
 						data-active={currentPath === item.url}
 					>
-						{#if item.icon}
-							<svelte:component this={item.icon} class="mr-2 size-4" />
+						{#if item.icon && typeof item.icon !== 'string'}
+							<item.icon class="mr-2 size-4" />
 						{/if}
 						<span>{item.title}</span>
-						{#if item.description}
-							<span class="text-muted-foreground ml-2 truncate text-xs">
+						{#if 'description' in item && item.description}
+							<span class="ml-2 truncate text-xs text-muted-foreground">
 								{item.description}
 							</span>
 						{/if}
@@ -112,10 +107,12 @@
 
 		<Command.Group heading="Actions">
 			<Command.Item onSelect={() => handleSelect('/workspace/settings')}>
-				<svelte:component
-					this={sidebarData.navSecondary.find((i) => i.title === 'Settings')?.icon}
-					class="mr-2 size-4"
-				/>
+				{#if sidebarData.navSecondary.find((i) => i.title === 'Settings')?.icon}
+					{@const SettingsIcon = sidebarData.navSecondary.find((i) => i.title === 'Settings')?.icon}
+					{#if SettingsIcon}
+						<SettingsIcon class="mr-2 size-4" />
+					{/if}
+				{/if}
 				<span>Open Settings</span>
 				<Command.Shortcut>⌘,</Command.Shortcut>
 			</Command.Item>

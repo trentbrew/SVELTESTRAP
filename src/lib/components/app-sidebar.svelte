@@ -5,6 +5,7 @@
 	import NavUser from './nav-user.svelte';
 	import NavPinned from './nav-pinned.svelte';
 	import GlobalSearch from './global-search.svelte';
+	import WorkspaceSwitcher from './workspace-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { sidebarData } from '$lib/data/sidebar-data';
 
@@ -25,14 +26,7 @@
 	<Sidebar.Header>
 		<Sidebar.Menu>
 			<Sidebar.MenuItem>
-				<Sidebar.MenuButton class="data-[slot=sidebar-menu-button]:!p-1.5">
-					{#snippet child({ props })}
-						<a href="/workspace/dashboard" {...props}>
-							<InnerShadowTopIcon class="!size-5" />
-							<span class="text-base font-semibold">Docket.tv</span>
-						</a>
-					{/snippet}
-				</Sidebar.MenuButton>
+				<WorkspaceSwitcher workspaces={sidebarData.workspaces} />
 			</Sidebar.MenuItem>
 		</Sidebar.Menu>
 	</Sidebar.Header>
@@ -41,18 +35,18 @@
 		<NavPinned />
 
 		<!-- Main Navigation -->
-		<NavMain items={sidebarData.navMain} sectionTitle="Navigation" />
+		<NavMain items={sidebarData.navMain} title="Navigation" />
 
 		<!-- Content Management -->
-		<NavMain items={sidebarData.navContent} sectionTitle="Content" class="mt-6" />
+		<NavMain items={sidebarData.navContent} title="Content" class="mt-0" />
 
 		<!-- Analytics -->
-		<NavMain items={sidebarData.navAnalytics} sectionTitle="Analytics" class="mt-6" />
+		<NavMain items={sidebarData.navAnalytics} title="Analytics" class="mt-0" />
 
 		<!-- Secondary Navigation -->
-		<NavSecondary items={sidebarData.navSecondary} class="mt-auto" />
+		<!-- <NavSecondary items={sidebarData.navSecondary} class="mt-auto" /> -->
 	</Sidebar.Content>
-	<Sidebar.Footer>
+	<Sidebar.Footer class="mt-auto border-t">
 		<NavUser user={sidebarData.user} />
 	</Sidebar.Footer>
 </Sidebar.Root>

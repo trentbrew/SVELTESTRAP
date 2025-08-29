@@ -3,14 +3,12 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import type { WithoutChildren } from '$lib/utils.js';
 	import type { ComponentProps } from 'svelte';
-	import type { Icon } from '@tabler/icons-svelte';
+	import type { NavItem } from '$lib/data/sidebar-data';
 
 	let {
 		items,
 		...restProps
-	}: { items: { title: string; url: string; icon: Icon }[] } & WithoutChildren<
-		ComponentProps<typeof Sidebar.Group>
-	> = $props();
+	}: { items: NavItem[] } & WithoutChildren<ComponentProps<typeof Sidebar.Group>> = $props();
 </script>
 
 <Sidebar.Group {...restProps}>
@@ -21,7 +19,9 @@
 					<Sidebar.MenuButton isActive={$page.url.pathname.startsWith(item.url)}>
 						{#snippet child({ props })}
 							<a href={item.url} {...props}>
-								<item.icon />
+								{#if item.icon}
+									<item.icon />
+								{/if}
 								<span>{item.title}</span>
 							</a>
 						{/snippet}

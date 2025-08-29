@@ -1,5 +1,5 @@
 <script lang="ts">
 </script>
 
-<h1 class="text-2xl font-bold mb-6">Team</h1>
+<h1 class="mb-6 text-2xl font-bold">Team</h1>
 <p>Placeholder page for Team.</p>
