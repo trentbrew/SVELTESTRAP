@@ -9,6 +9,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
+	import { useSidebar } from '$lib/components/ui/sidebar/context.svelte.js';
 	import type { Icon } from '@tabler/icons-svelte';
 	import SearchIcon from '@tabler/icons-svelte/icons/search';
 
@@ -20,26 +21,33 @@
 	}: {
 		items: { title: string; url: string; icon?: Icon }[];
 		title?: string;
+		I;
 		class?: string;
 	} = $props();
 
+	const sidebar = useSidebar();
 	let open = $state(true); // Default to open
 </script>
 
 <Sidebar.Group class={className} {...restProps}>
 	<Collapsible.Root bind:open class="w-full">
-		<Collapsible.Trigger class="flex items-center justify-between hover:opacity-100">
-			<Sidebar.GroupLabel>{title?.toUpperCase() || 'Documents'}</Sidebar.GroupLabel>
-			<div class="p-1" class:rotate-180={open}>
-				<ChevronDownIcon class="size-4 opacity-50 transition-transform duration-200" />
-			</div>
-		</Collapsible.Trigger>
+		{#if sidebar.state !== 'collapsed'}
+			<Collapsible.Trigger class="flex items-center justify-between hover:opacity-100">
+				<div class="-rotate-90 p-1 duration-200" class:rotate-[0deg]={open}>
+					<ChevronDownIcon class="size-4 opacity-50 transition-transform duration-200" />
+				</div>
+				<Sidebar.GroupLabel
+					class="flex items-center gap-2 hover:opacity-100 hover:transition-none hover:duration-0"
+					>{title?.toUpperCase() || 'Documents'}</Sidebar.GroupLabel
+				>
+			</Collapsible.Trigger>
+		{/if}
 		<Collapsible.Content>
 			<Sidebar.GroupContent class="flex flex-col gap-2">
 				<Sidebar.Menu class="mt-0">
 					{#each items as item (item.title)}
 						{#if !pinnedItemsStore.isPinned(item.url)}
-							<Sidebar.MenuItem class="pl-2">
+							<Sidebar.MenuItem class="ml-4">
 								<Sidebar.MenuButton
 									tooltipContent={item.title}
 									isActive={$page.url.pathname.startsWith(item.url)}
@@ -49,28 +57,32 @@
 											{#if item.icon}
 												<item.icon class="mr-2 size-4 opacity-50" />
 											{/if}
-											<span>{item.title}</span>
+											{#if sidebar.state !== 'collapsed'}
+												<span>{item.title}</span>
+											{/if}
 										</a>
 									{/snippet}
 								</Sidebar.MenuButton>
-								<Sidebar.MenuAction
-									onclick={() =>
-										pinnedItemsStore.toggle({
-											title: item.title,
-											url: item.url,
-											icon: item.icon,
-											type: 'main'
-										})}
-									showOnHover
-									class="data-[state=open]:bg-accent rounded-sm"
-								>
-									{#if pinnedItemsStore.isPinned(item.url)}
-										<PinFilledIcon class="h-4 w-4" />
-									{:else}
-										<PinIcon class="h-4 w-4" />
-									{/if}
-									<span class="sr-only">Pin item</span>
-								</Sidebar.MenuAction>
+								{#if sidebar.state !== 'collapsed'}
+									<Sidebar.MenuAction
+										onclick={() =>
+											pinnedItemsStore.toggle({
+												title: item.title,
+												url: item.url,
+												icon: item.icon,
+												type: 'main'
+											})}
+										showOnHover
+										class="data-[state=open]:bg-accent rounded-sm"
+									>
+										{#if pinnedItemsStore.isPinned(item.url)}
+											<PinFilledIcon class="h-4 w-4" />
+										{:else}
+											<PinIcon class="h-4 w-4" />
+										{/if}
+										<span class="sr-only">Pin item</span>
+									</Sidebar.MenuAction>
+								{/if}
 							</Sidebar.MenuItem>
 						{/if}
 					{/each}
@@ -78,4 +90,9 @@
 			</Sidebar.GroupContent>
 		</Collapsible.Content>
 	</Collapsible.Root>
+
+	<!-- Add divider in collapsed mode -->
+	{#if sidebar.state === 'collapsed'}
+		<div class="bg-border mx-auto mt-4 h-px w-12 -translate-x-0"></div>
+	{/if}
 </Sidebar.Group>

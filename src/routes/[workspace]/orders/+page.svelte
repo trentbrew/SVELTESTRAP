@@ -1,0 +1,5 @@
+<script lang="ts">
+</script>
+
+<h1 class="mb-6 text-2xl font-bold">Orders</h1>
+<p>Placeholder page for Orders. Show Webflow-synced orders here.</p>

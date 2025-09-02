@@ -1,32 +1,30 @@
 <script lang="ts">
-	import InnerShadowTopIcon from '@tabler/icons-svelte/icons/inner-shadow-top';
 	import NavMain from './nav-main.svelte';
-	import NavSecondary from './nav-secondary.svelte';
 	import NavUser from './nav-user.svelte';
 	import NavPinned from './nav-pinned.svelte';
 	import GlobalSearch from './global-search.svelte';
 	import WorkspaceSwitcher from './workspace-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import { sidebarData } from '$lib/data/sidebar-data';
+	import { getSidebarData } from '$lib/data/sidebar-data';
+	import { page } from '$app/stores';
 
 	import type { ComponentProps } from 'svelte';
 
 	let { ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 
-	// Combine all navigation items for search functionality
-	let allNavItems = $derived([
-		...sidebarData.navMain,
-		...sidebarData.navContent,
-		...sidebarData.navAnalytics,
-		...sidebarData.navSecondary
-	]);
+	// Sidebar data is now workspace-aware
+	let workspaceSlug = $derived($page.params.workspace);
+	let data = $derived(getSidebarData(workspaceSlug));
+
+	// Combine all navigation items for search functionality (exclude docs in workspace)
+	let allNavItems = $derived([...data.navMain, ...data.navAnalytics, ...data.navSecondary]);
 </script>
 
-<Sidebar.Root collapsible="offcanvas" {...restProps}>
+<Sidebar.Root collapsible="icon" {...restProps}>
 	<Sidebar.Header>
 		<Sidebar.Menu>
 			<Sidebar.MenuItem>
-				<WorkspaceSwitcher workspaces={sidebarData.workspaces} />
+				<WorkspaceSwitcher workspaces={data.workspaces} />
 			</Sidebar.MenuItem>
 		</Sidebar.Menu>
 	</Sidebar.Header>
@@ -35,18 +33,15 @@
 		<NavPinned />
 
 		<!-- Main Navigation -->
-		<NavMain items={sidebarData.navMain} title="Navigation" />
-
-		<!-- Content Management -->
-		<NavMain items={sidebarData.navContent} title="Content" class="mt-0" />
+		<NavMain items={data.navMain} title="Navigation" />
 
 		<!-- Analytics -->
-		<NavMain items={sidebarData.navAnalytics} title="Analytics" class="mt-0" />
+		<NavMain items={data.navAnalytics} title="Analytics" class="mt-0" />
 
 		<!-- Secondary Navigation -->
 		<!-- <NavSecondary items={sidebarData.navSecondary} class="mt-auto" /> -->
 	</Sidebar.Content>
-	<Sidebar.Footer class="mt-auto border-t">
-		<NavUser user={sidebarData.user} />
+	<Sidebar.Footer class="mt-auto border-t px-2 pt-4">
+		<NavUser user={data.user} />
 	</Sidebar.Footer>
 </Sidebar.Root>

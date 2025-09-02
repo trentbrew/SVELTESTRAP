@@ -1,11 +1,14 @@
 <script lang="ts">
 	import * as Command from '$lib/components/ui/command/index.js';
 	import SearchIcon from '@tabler/icons-svelte/icons/search';
-	import { sidebarData } from '$lib/data/sidebar-data';
+	import SettingsIcon from '@tabler/icons-svelte/icons/settings';
 	import { page } from '$app/stores';
 	import type { NavItem } from '$lib/data/sidebar-data';
+	import { useSidebar } from '$lib/components/ui/sidebar/context.svelte.js';
 
-	let { items }: { items: NavItem[] } = $props();
+	let { items, showWorkspaceActions = true }: { items: NavItem[]; showWorkspaceActions?: boolean } = $props();
+
+	const sidebar = useSidebar();
 
 	// Filter out items without a URL or with '#' as URL
 	const filteredNavItems = items.filter((item) => item.url && item.url !== '#');
@@ -55,23 +58,38 @@
 
 <svelte:document onkeydown={handleKeydown} />
 
-<!-- The whole thing is now a button that opens the command dialog -->
-<div class="p-2">
-	<button
-		type="button"
-		class="flex w-full items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-accent focus:ring-2 focus:ring-ring focus:outline-none"
-		onclick={openDialog}
-		aria-label="Open global search"
-	>
-		<SearchIcon class="size-4 opacity-70" />
-		<span class="flex-1 text-left">Search or jump to...</span>
-		<kbd
-			class="pointer-events-none inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 select-none"
+<!-- Show different layouts based on sidebar state -->
+{#if sidebar.state === 'collapsed'}
+	<!-- Collapsed state: just the search icon -->
+	<div class="p-2">
+		<button
+			type="button"
+			class="flex w-full items-center justify-center rounded-md border bg-background/50 p-2 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-accent focus:ring-2 focus:ring-ring focus:outline-none"
+			onclick={openDialog}
+			aria-label="Open global search"
 		>
-			<span class="text-xs">⌘</span>K
-		</kbd>
-	</button>
-</div>
+			<SearchIcon class="size-4 opacity-70" />
+		</button>
+	</div>
+{:else}
+	<!-- Expanded state: full search bar -->
+	<div class="p-2">
+		<button
+			type="button"
+			class="flex w-full items-center gap-2 rounded-md border bg-background/50 px-3 py-2 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-accent focus:ring-2 focus:ring-ring focus:outline-none"
+			onclick={openDialog}
+			aria-label="Open global search"
+		>
+			<SearchIcon class="size-4 opacity-70" />
+			<span class="flex-1 text-left">Search or jump to...</span>
+			<kbd
+				class="pointer-events-none inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 select-none"
+			>
+				<span class="text-xs">⌘</span>K
+			</kbd>
+		</button>
+	</div>
+{/if}
 
 <Command.Dialog bind:open>
 	<Command.Input
@@ -105,21 +123,18 @@
 
 		<Command.Separator />
 
-		<Command.Group heading="Actions">
-			<Command.Item onSelect={() => handleSelect('/workspace/settings')}>
-				{#if sidebarData.navSecondary.find((i) => i.title === 'Settings')?.icon}
-					{@const SettingsIcon = sidebarData.navSecondary.find((i) => i.title === 'Settings')?.icon}
-					{#if SettingsIcon}
-						<SettingsIcon class="mr-2 size-4" />
-					{/if}
-				{/if}
-				<span>Open Settings</span>
-				<Command.Shortcut>⌘,</Command.Shortcut>
-			</Command.Item>
-			<Command.Item onSelect={() => window.location.reload()}>
-				<span>Reload Page</span>
-				<Command.Shortcut>⌘R</Command.Shortcut>
-			</Command.Item>
-		</Command.Group>
+		{#if showWorkspaceActions && $page.params.workspace}
+			<Command.Group heading="Actions">
+				<Command.Item onSelect={() => handleSelect(`/${$page.params.workspace}/settings`)}>
+					<SettingsIcon class="mr-2 size-4" />
+					<span>Open Settings</span>
+					<Command.Shortcut>⌘,</Command.Shortcut>
+				</Command.Item>
+				<Command.Item onSelect={() => window.location.reload()}>
+					<span>Reload Page</span>
+					<Command.Shortcut>⌘R</Command.Shortcut>
+				</Command.Item>
+			</Command.Group>
+		{/if}
 	</Command.List>
 </Command.Dialog>

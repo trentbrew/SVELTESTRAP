@@ -1,26 +1,22 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
-	let state = $state({
-		count: 0
+	onMount(() => {
+		// Ensure we're in the browser and redirect to dashboard
+		if (browser) {
+			import('$lib/routes').then(({ DEFAULT_WORKSPACE }) => {
+				goto(`/${DEFAULT_WORKSPACE}/dashboard`, { replaceState: true });
+			});
+		}
 	});
-
-	function increment() {
-		state.count++;
-	}
-
-	function decrement() {
-		state.count--;
-	}
 </script>
 
-<div class="flex h-screen w-full items-center justify-center">
-	<div class="flex flex-col items-center gap-2">
-		<h1>Count: {state.count}</h1>
-		<div class="flex gap-2">
-			<Button onclick={decrement} variant="destructive">-</Button>
-			<Button onclick={increment}>+</Button>
-		</div>
-		<a href="/workspace/dashboard" class="text-blue-500 hover:underline">Go to Dashboard</a>
+<!-- This page redirects to /{workspace}/dashboard -->
+<div class="flex min-h-screen items-center justify-center">
+	<div class="text-center">
+		<h1 class="mb-2 text-2xl font-semibold">Redirecting...</h1>
+		<p class="text-gray-600">Taking you to the dashboard</p>
 	</div>
 </div>

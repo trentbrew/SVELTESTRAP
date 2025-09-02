@@ -4,10 +4,13 @@
 	import SettingsIcon from '@tabler/icons-svelte/icons/settings';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import { useSidebar } from '$lib/components/ui/sidebar/context.svelte.js';
 	import type { Workspace } from '$lib/data/sidebar-data';
+	import { page } from '$app/stores';
 
 	let { workspaces }: { workspaces: Workspace[] } = $props();
 
+	const sidebar = useSidebar();
 	let open = $state(false);
 
 	function handleWorkspaceSelect(workspace: Workspace) {
@@ -16,31 +19,46 @@
 	}
 
 	function handleCreateWorkspace() {
-		// Navigate to workspace creation page
-		window.location.href = '/workspace/create';
+		// Placeholder: implement global workspace create route if needed
+		window.location.href = '/workspaces/create';
 	}
 
 	function handleManageWorkspaces() {
-		// Navigate to workspace management page
-		window.location.href = '/workspace/settings';
+		const slug = $page.params.workspace || (workspaces[0]?.id ?? 'workspace');
+		window.location.href = `/${slug}/settings`;
 	}
 
 	// Get the active workspace
-	let activeWorkspace = $derived(workspaces.find((w) => w.isActive) || workspaces[0]);
+	let activeWorkspace = $derived(
+		workspaces.find((w) => w.id === $page.params.workspace) ||
+			workspaces.find((w) => w.isActive) ||
+			workspaces[0]
+	);
 </script>
 
-<Sidebar.MenuButton class="data-[slot=sidebar-menu-button]:!p-1.5">
+<Sidebar.MenuButton class="w-full data-[slot=sidebar-menu-button]:!p-1">
 	<DropdownMenu.Root bind:open>
 		<DropdownMenu.Trigger class="w-full">
 			<button
 				type="button"
-				class="hover:bg-accent flex w-full items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left"
+				class="hover:bg-accent flex w-full items-center justify-between gap-2 rounded-md text-left {sidebar.state ===
+				'collapsed'
+					? ''
+					: 'px-1.5 py-1.5'}"
 			>
-				<div class="flex items-center gap-2">
-					<img src={activeWorkspace?.logo} alt={activeWorkspace?.name} class="size-5 rounded-sm" />
-					<span class="flex-1 text-sm font-medium">{activeWorkspace?.name}</span>
+				<div class="flex w-full min-w-0 items-center gap-2">
+					<div class="flex h-6 w-6 flex-shrink-0 items-center justify-center">
+						<img
+							src={activeWorkspace?.logo}
+							alt={activeWorkspace?.name}
+							class="h-6 w-6 rounded-full object-cover"
+						/>
+					</div>
+					{#if sidebar.state !== 'collapsed'}
+						<span class="flex-1 truncate text-sm font-medium">{activeWorkspace?.name}</span>
+						<ChevronDownIcon class="size-4 flex-shrink-0 opacity-50" />
+					{/if}
 				</div>
-				<ChevronDownIcon class="size-4 opacity-50" />
 			</button>
 		</DropdownMenu.Trigger>
 
@@ -75,3 +93,8 @@
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 </Sidebar.MenuButton>
+
+<!-- Add divider after workspace switcher in collapsed mode -->
+{#if sidebar.state === 'collapsed'}
+	<div class="bg-border mx-auto my-1 h-px w-8 translate-x-2"></div>
+{/if}

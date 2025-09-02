@@ -7,10 +7,11 @@
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import { useSidebar } from '$lib/components/ui/sidebar/context.svelte.js';
 
 	let { user }: { user: { name: string; email: string; avatar: string } } = $props();
 
-	const sidebar = Sidebar.useSidebar();
+	const sidebar = useSidebar();
 </script>
 
 <Sidebar.Menu>
@@ -27,13 +28,15 @@
 							<Avatar.Image src={user.avatar} alt={user.name} />
 							<Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
 						</Avatar.Root>
-						<div class="grid flex-1 text-left text-sm leading-tight">
-							<span class="truncate font-medium">{user.name}</span>
-							<span class="truncate text-xs text-muted-foreground">
-								{user.email}
-							</span>
-						</div>
-						<DotsVerticalIcon class="ml-auto size-4" />
+						{#if sidebar.state !== 'collapsed'}
+							<div class="grid flex-1 text-left text-sm leading-tight">
+								<span class="truncate font-medium">{user.name}</span>
+								<span class="text-muted-foreground truncate text-xs">
+									{user.email}
+								</span>
+							</div>
+							<DotsVerticalIcon class="ml-auto size-4" />
+						{/if}
 					</Sidebar.MenuButton>
 				{/snippet}
 			</DropdownMenu.Trigger>
@@ -51,7 +54,7 @@
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-medium">{user.name}</span>
-							<span class="truncate text-xs text-muted-foreground">
+							<span class="text-muted-foreground truncate text-xs">
 								{user.email}
 							</span>
 						</div>
