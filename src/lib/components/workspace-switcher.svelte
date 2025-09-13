@@ -41,7 +41,7 @@
 		<DropdownMenu.Trigger class="w-full">
 			<button
 				type="button"
-				class="hover:bg-accent flex w-full items-center justify-between gap-2 rounded-md text-left {sidebar.state ===
+				class="flex w-full items-center justify-between gap-2 rounded-md text-left hover:bg-accent {sidebar.state ===
 				'collapsed'
 					? ''
 					: 'px-1.5 py-1.5'}"
@@ -74,7 +74,7 @@
 					<img src={workspace.logo} alt={workspace.name} class="size-4 rounded-sm" />
 					<span class="flex-1">{workspace.name}</span>
 					{#if workspace.isActive}
-						<div class="bg-primary size-2 rounded-full"></div>
+						<div class="size-2 rounded-full bg-primary"></div>
 					{/if}
 				</DropdownMenu.Item>
 			{/each}
@@ -95,6 +95,6 @@
 </Sidebar.MenuButton>
 
 <!-- Add divider after workspace switcher in collapsed mode -->
-{#if sidebar.state === 'collapsed'}
+<!-- {#if sidebar.state === 'collapsed'}
 	<div class="bg-border mx-auto my-1 h-px w-8 translate-x-2"></div>
-{/if}
+{/if} -->

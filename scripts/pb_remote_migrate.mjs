@@ -10,7 +10,7 @@
 import PocketBase from 'pocketbase';
 
 // Read from env and sanitize the base URL (remove '/_/' admin UI path if present)
-const rawUrl = process.env.PB_URL || '';
+const rawUrl = process.env.PB_URL || 'http://localhost:3456';
 const PB_ADMIN_EMAIL = process.env.PB_ADMIN_EMAIL || '';
 const PB_ADMIN_PASSWORD = process.env.PB_ADMIN_PASSWORD || '';
 

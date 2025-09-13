@@ -13,12 +13,12 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<ModeWatcher />
+<ModeWatcher defaultMode="light" />
 <Sidebar.Provider
 	style="--sidebar-width: calc(var(--spacing) * 72); --header-height: calc(var(--spacing) * 12);"
 >
 	<DocsSidebar variant="inset" />
-	<Sidebar.Inset class="bg-background border">
+	<Sidebar.Inset class="border bg-background">
 		<DocsHeader />
 		<div class="flex flex-1 flex-col">
 			<div class="@container/main flex flex-1 flex-col gap-2">

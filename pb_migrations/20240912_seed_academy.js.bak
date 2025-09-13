@@ -1,0 +1,902 @@
+/// pb_migrations/20240912_seed_academy.js
+migrate((db) => {
+	const dao = $dbx;
+
+	// Create instructor account
+	const instructor = dao.createRecord('users', {
+			email: 'instructor@academy.dev',
+			emailVisibility: true,
+			password: 'instructor123',
+			passwordConfirm: 'instructor123',
+			name: 'Academy Instructor',
+			role: 'instructor'
+		});
+
+		console.log('✅ Created instructor account:', instructor.email);
+
+	// Course 1: JavaScript Fundamentals
+	const course1 = dao.createRecord('courses', {
+			title: 'JavaScript Fundamentals',
+			slug: 'javascript-fundamentals',
+			description:
+				'Master the fundamentals of JavaScript programming. Learn variables, functions, objects, and control structures.',
+			level: 'beginner',
+			visibility: 'public',
+			author: instructor.id,
+			order: 1,
+			status: 'published'
+		});
+
+		console.log('✅ Created course:', course1.title);
+
+		// Course 1 Modules
+	const jsModule1 = dao.createRecord('modules', {
+			course: course1.id,
+			title: 'Variables and Data Types',
+			order: 1,
+			description: 'Learn about JavaScript variables, primitive data types, and type coercion.'
+		});
+
+	const jsModule2 = dao.createRecord('modules', {
+			course: course1.id,
+			title: 'Functions and Scope',
+			order: 2,
+			description:
+				'Understand function declarations, expressions, and variable scope in JavaScript.'
+		});
+
+	const jsModule3 = dao.createRecord('modules', {
+			course: course1.id,
+			title: 'Objects and Arrays',
+			order: 3,
+			description: 'Work with JavaScript objects, arrays, and common array methods.'
+		});
+
+		// Course 1 Lessons
+		const jsLessons = [
+			// Module 1: Variables and Data Types
+			{
+				title: 'Introduction to Variables',
+				slug: 'introduction-to-variables',
+				order: 1,
+				estimatedMinutes: 15,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'Variables are containers for storing data values. In JavaScript, you can declare variables using `let`, `const`, or `var`.'
+						},
+						{
+							type: 'code',
+							content: 'let message = "Hello, World!";\nconst PI = 3.14159;\nvar count = 0;'
+						}
+					]
+				}
+			},
+			{
+				title: 'Data Types in JavaScript',
+				slug: 'data-types-in-javascript',
+				order: 2,
+				estimatedMinutes: 20,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'JavaScript has several primitive data types: number, string, boolean, undefined, null, and symbol.'
+						},
+						{
+							type: 'code',
+							content:
+								'let age = 25; // number\nlet name = "Alice"; // string\nlet isStudent = true; // boolean\nlet data = null; // null\nlet value; // undefined'
+						}
+					]
+				}
+			},
+			{
+				title: 'Type Coercion',
+				slug: 'type-coercion',
+				order: 3,
+				estimatedMinutes: 18,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'Type coercion is the automatic conversion of values from one data type to another.'
+						},
+						{
+							type: 'code',
+							content:
+								'console.log("5" + 3); // "53"\nconsole.log("5" - 3); // 2\nconsole.log(true + 1); // 2'
+						}
+					]
+				}
+			},
+			{
+				title: 'Variable Hoisting',
+				slug: 'variable-hoisting',
+				order: 4,
+				estimatedMinutes: 12,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								"Hoisting is JavaScript's behavior of moving declarations to the top of their scope."
+						},
+						{
+							type: 'code',
+							content:
+								'console.log(x); // undefined\nvar x = 5;\n\n// This is equivalent to:\nvar x;\nconsole.log(x); // undefined\nx = 5;'
+						}
+					]
+				}
+			},
+			// Module 2: Functions and Scope
+			{
+				title: 'Function Declarations',
+				slug: 'function-declarations',
+				order: 1,
+				estimatedMinutes: 16,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Functions are reusable blocks of code that perform specific tasks.'
+						},
+						{
+							type: 'code',
+							content:
+								'function greet(name) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet("World")); // "Hello, World!"'
+						}
+					]
+				}
+			},
+			{
+				title: 'Function Expressions',
+				slug: 'function-expressions',
+				order: 2,
+				estimatedMinutes: 14,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Function expressions create functions as part of an expression.'
+						},
+						{
+							type: 'code',
+							content:
+								'const multiply = function(a, b) {\n  return a * b;\n};\n\nconsole.log(multiply(3, 4)); // 12'
+						}
+					]
+				}
+			},
+			{
+				title: 'Arrow Functions',
+				slug: 'arrow-functions',
+				order: 3,
+				estimatedMinutes: 18,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Arrow functions provide a shorter syntax for writing function expressions.'
+						},
+						{
+							type: 'code',
+							content:
+								'const add = (a, b) => a + b;\nconst square = x => x * x;\nconst greet = () => "Hello!";'
+						}
+					]
+				}
+			},
+			{
+				title: 'Scope and Closures',
+				slug: 'scope-and-closures',
+				order: 4,
+				estimatedMinutes: 22,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'Scope determines the accessibility of variables, and closures allow functions to access variables from their outer scope.'
+						},
+						{
+							type: 'code',
+							content:
+								'function outer() {\n  let count = 0;\n  return function inner() {\n    count++;\n    return count;\n  };\n}\n\nconst counter = outer();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2'
+						}
+					]
+				}
+			},
+			// Module 3: Objects and Arrays
+			{
+				title: 'Creating Objects',
+				slug: 'creating-objects',
+				order: 1,
+				estimatedMinutes: 16,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'Objects are collections of key-value pairs that represent real-world entities.'
+						},
+						{
+							type: 'code',
+							content:
+								'const person = {\n  name: "Alice",\n  age: 30,\n  greet: function() {\n    return `Hi, I\'m ${this.name}`;\n  }\n};'
+						}
+					]
+				}
+			},
+			{
+				title: 'Object Methods and Properties',
+				slug: 'object-methods-and-properties',
+				order: 2,
+				estimatedMinutes: 18,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Learn how to access and modify object properties and methods.'
+						},
+						{
+							type: 'code',
+							content:
+								'console.log(person.name); // "Alice"\nperson.age = 31;\nperson.city = "New York";\ndelete person.age;'
+						}
+					]
+				}
+			},
+			{
+				title: 'Array Basics',
+				slug: 'array-basics',
+				order: 3,
+				estimatedMinutes: 20,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Arrays are ordered lists of values that can hold any data type.'
+						},
+						{
+							type: 'code',
+							content:
+								'const fruits = ["apple", "banana", "orange"];\nconsole.log(fruits[0]); // "apple"\nfruits.push("grape");\nconsole.log(fruits.length); // 4'
+						}
+					]
+				}
+			},
+			{
+				title: 'Array Methods',
+				slug: 'array-methods',
+				order: 4,
+				estimatedMinutes: 25,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'JavaScript provides many useful array methods for manipulating arrays.'
+						},
+						{
+							type: 'code',
+							content:
+								'const numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2);\nconst evens = numbers.filter(n => n % 2 === 0);\nconst sum = numbers.reduce((acc, n) => acc + n, 0);'
+						}
+					]
+				}
+			}
+		];
+
+		// Create Course 1 lessons
+		for (let i = 0; i < jsLessons.length; i++) {
+			const lesson = jsLessons[i];
+			let moduleId;
+
+			if (i < 4) moduleId = jsModule1.id;
+			else if (i < 8) moduleId = jsModule2.id;
+			else moduleId = jsModule3.id;
+
+		dao.createRecord('lessons', {
+				course: course1.id,
+				module: moduleId,
+				title: lesson.title,
+				slug: lesson.slug,
+				order: lesson.order,
+				estimatedMinutes: lesson.estimatedMinutes,
+				isFree: lesson.isFree,
+				status: lesson.status,
+				content: lesson.content,
+				createdBy: instructor.id
+			});
+		}
+
+		console.log('✅ Created 12 JavaScript lessons');
+
+		// Course 2: React Development
+	const course2 = dao.createRecord('courses', {
+			title: 'React Development',
+			slug: 'react-development',
+			description:
+				'Build modern web applications with React. Learn components, hooks, state management, and best practices.',
+			level: 'intro',
+			visibility: 'public',
+			author: instructor.id,
+			order: 2,
+			status: 'published'
+		});
+
+		console.log('✅ Created course:', course2.title);
+
+		// Course 2 Modules
+	const reactModule1 = dao.createRecord('modules', {
+			course: course2.id,
+			title: 'Components and JSX',
+			order: 1,
+			description: 'Learn the fundamentals of React components and JSX syntax.'
+		});
+
+	const reactModule2 = dao.createRecord('modules', {
+			course: course2.id,
+			title: 'State and Props',
+			order: 2,
+			description: 'Understand how to manage component state and pass data through props.'
+		});
+
+	const reactModule3 = dao.createRecord('modules', {
+			course: course2.id,
+			title: 'Hooks and Effects',
+			order: 3,
+			description: 'Master React hooks for state management and side effects.'
+		});
+
+		// Course 2 Lessons
+		const reactLessons = [
+			// Module 1: Components and JSX
+			{
+				title: 'Introduction to React',
+				slug: 'introduction-to-react',
+				order: 1,
+				estimatedMinutes: 20,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'React is a JavaScript library for building user interfaces, particularly web applications.'
+						},
+						{
+							type: 'code',
+							content:
+								"import React from 'react';\n\nfunction App() {\n  return <h1>Hello, React!</h1>;\n}\n\nexport default App;"
+						}
+					]
+				}
+			},
+			{
+				title: 'Understanding JSX',
+				slug: 'understanding-jsx',
+				order: 2,
+				estimatedMinutes: 18,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'JSX is a syntax extension that allows you to write HTML-like code in JavaScript.'
+						},
+						{
+							type: 'code',
+							content:
+								"const element = <h1 className=\"greeting\">Hello, {name}!</h1>;\n\n// JSX is compiled to:\nconst element = React.createElement('h1', \n  { className: 'greeting' }, \n  'Hello, ', name, '!'\n);"
+						}
+					]
+				}
+			},
+			{
+				title: 'Functional Components',
+				slug: 'functional-components',
+				order: 3,
+				estimatedMinutes: 16,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Functional components are the simplest way to define React components.'
+						},
+						{
+							type: 'code',
+							content:
+								'function Welcome(props) {\n  return <h1>Hello, {props.name}</h1>;\n}\n\n// Arrow function syntax\nconst Welcome = (props) => {\n  return <h1>Hello, {props.name}</h1>;\n};'
+						}
+					]
+				}
+			},
+			{
+				title: 'Component Composition',
+				slug: 'component-composition',
+				order: 4,
+				estimatedMinutes: 22,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Components can be composed together to build complex user interfaces.'
+						},
+						{
+							type: 'code',
+							content:
+								'function App() {\n  return (\n    <div>\n      <Header />\n      <Main />\n      <Footer />\n    </div>\n  );\n}'
+						}
+					]
+				}
+			},
+			// Module 2: State and Props
+			{
+				title: 'Understanding Props',
+				slug: 'understanding-props',
+				order: 1,
+				estimatedMinutes: 18,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Props are how you pass data from parent components to child components.'
+						},
+						{
+							type: 'code',
+							content:
+								'function UserCard(props) {\n  return (\n    <div>\n      <h2>{props.name}</h2>\n      <p>{props.email}</p>\n    </div>\n  );\n}\n\n<UserCard name="Alice" email="alice@example.com" />'
+						}
+					]
+				}
+			},
+			{
+				title: 'Component State',
+				slug: 'component-state',
+				order: 2,
+				estimatedMinutes: 20,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'State allows components to manage their own data that can change over time.'
+						},
+						{
+							type: 'code',
+							content:
+								'function Counter() {\n  const [count, setCount] = useState(0);\n  \n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>\n        Increment\n      </button>\n    </div>\n  );\n}'
+						}
+					]
+				}
+			},
+			{
+				title: 'State Updates',
+				slug: 'state-updates',
+				order: 3,
+				estimatedMinutes: 16,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'State updates in React are asynchronous and should be handled carefully.'
+						},
+						{
+							type: 'code',
+							content:
+								"// Correct way to update state based on previous state\nsetCount(prevCount => prevCount + 1);\n\n// For objects\nsetUser(prevUser => ({\n  ...prevUser,\n  name: 'New Name'\n}));"
+						}
+					]
+				}
+			},
+			{
+				title: 'Lifting State Up',
+				slug: 'lifting-state-up',
+				order: 4,
+				estimatedMinutes: 24,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'When multiple components need to share state, lift it up to their common parent.'
+						},
+						{
+							type: 'code',
+							content:
+								'function App() {\n  const [temperature, setTemperature] = useState(20);\n  \n  return (\n    <div>\n      <TemperatureInput \n        value={temperature}\n        onChange={setTemperature}\n      />\n      <TemperatureDisplay value={temperature} />\n    </div>\n  );\n}'
+						}
+					]
+				}
+			},
+			// Module 3: Hooks and Effects
+			{
+				title: 'useEffect Hook',
+				slug: 'useeffect-hook',
+				order: 1,
+				estimatedMinutes: 22,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'useEffect lets you perform side effects in functional components.'
+						},
+						{
+							type: 'code',
+							content:
+								"function DataFetcher() {\n  const [data, setData] = useState(null);\n  \n  useEffect(() => {\n    fetch('/api/data')\n      .then(response => response.json())\n      .then(setData);\n  }, []); // Empty dependency array = run once\n  \n  return <div>{data ? data.title : 'Loading...'}</div>;\n}"
+						}
+					]
+				}
+			},
+			{
+				title: 'useEffect Dependencies',
+				slug: 'useeffect-dependencies',
+				order: 2,
+				estimatedMinutes: 20,
+				isFree: true,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'The dependency array controls when useEffect runs.'
+						},
+						{
+							type: 'code',
+							content:
+								'useEffect(() => {\n  // Runs on every render\n});\n\nuseEffect(() => {\n  // Runs only on mount\n}, []);\n\nuseEffect(() => {\n  // Runs when count changes\n}, [count]);'
+						}
+					]
+				}
+			},
+			{
+				title: 'Custom Hooks',
+				slug: 'custom-hooks',
+				order: 3,
+				estimatedMinutes: 25,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content: 'Custom hooks let you extract component logic into reusable functions.'
+						},
+						{
+							type: 'code',
+							content:
+								'function useCounter(initialValue = 0) {\n  const [count, setCount] = useState(initialValue);\n  \n  const increment = () => setCount(c => c + 1);\n  const decrement = () => setCount(c => c - 1);\n  const reset = () => setCount(initialValue);\n  \n  return { count, increment, decrement, reset };\n}'
+						}
+					]
+				}
+			},
+			{
+				title: 'useContext Hook',
+				slug: 'usecontext-hook',
+				order: 4,
+				estimatedMinutes: 28,
+				isFree: false,
+				status: 'published',
+				content: {
+					type: 'lesson',
+					sections: [
+						{
+							type: 'text',
+							content:
+								'useContext provides a way to pass data through the component tree without prop drilling.'
+						},
+						{
+							type: 'code',
+							content:
+								'const ThemeContext = createContext();\n\nfunction App() {\n  return (\n    <ThemeContext.Provider value="dark">\n      <Header />\n    </ThemeContext.Provider>\n  );\n}\n\nfunction Header() {\n  const theme = useContext(ThemeContext);\n  return <div className={`header ${theme}`}>Header</div>;\n}'
+						}
+					]
+				}
+			}
+		];
+
+		// Create Course 2 lessons
+		for (let i = 0; i < reactLessons.length; i++) {
+			const lesson = reactLessons[i];
+			let moduleId;
+
+			if (i < 4) moduleId = reactModule1.id;
+			else if (i < 8) moduleId = reactModule2.id;
+			else moduleId = reactModule3.id;
+
+		dao.createRecord('lessons', {
+				course: course2.id,
+				module: moduleId,
+				title: lesson.title,
+				slug: lesson.slug,
+				order: lesson.order,
+				estimatedMinutes: lesson.estimatedMinutes,
+				isFree: lesson.isFree,
+				status: lesson.status,
+				content: lesson.content,
+				createdBy: instructor.id
+			});
+		}
+
+		console.log('✅ Created 12 React lessons');
+
+		// Create some sample exercises for the first few lessons
+		const exercises = [
+			// JavaScript exercises
+			{
+				lessonSlug: 'introduction-to-variables',
+				title: 'Variable Declaration Practice',
+				prompt:
+					'Create three variables: a string called "greeting", a number called "age", and a boolean called "isStudent".',
+				starterCode: '// Your code here\n',
+				solutionCode: 'let greeting = "Hello";\nlet age = 25;\nlet isStudent = true;',
+				language: 'js',
+				order: 1,
+				visibility: 'public'
+			},
+			{
+				lessonSlug: 'data-types-in-javascript',
+				title: 'Type Checking',
+				prompt: 'Use typeof to check the data type of the following variables and log the results.',
+				starterCode:
+					'let value1 = 42;\nlet value2 = "Hello";\nlet value3 = true;\n\n// Check types here\n',
+				solutionCode:
+					'let value1 = 42;\nlet value2 = "Hello";\nlet value3 = true;\n\nconsole.log(typeof value1); // "number"\nconsole.log(typeof value2); // "string"\nconsole.log(typeof value3); // "boolean"',
+				language: 'js',
+				order: 1,
+				visibility: 'public'
+			},
+			{
+				lessonSlug: 'function-declarations',
+				title: 'Create a Calculator Function',
+				prompt:
+					'Write a function called "calculate" that takes two numbers and an operator (+, -, *, /) and returns the result.',
+				starterCode: 'function calculate(a, b, operator) {\n  // Your code here\n}',
+				solutionCode:
+					'function calculate(a, b, operator) {\n  switch(operator) {\n    case "+":\n      return a + b;\n    case "-":\n      return a - b;\n    case "*":\n      return a * b;\n    case "/":\n      return a / b;\n    default:\n      return "Invalid operator";\n  }\n}',
+				language: 'js',
+				order: 1,
+				visibility: 'public'
+			},
+			// React exercises
+			{
+				lessonSlug: 'introduction-to-react',
+				title: 'Create Your First Component',
+				prompt: 'Create a React component called "Welcome" that displays a greeting message.',
+				starterCode:
+					"import React from 'react';\n\nfunction Welcome() {\n  // Your code here\n}\n\nexport default Welcome;",
+				solutionCode:
+					"import React from 'react';\n\nfunction Welcome() {\n  return <h1>Welcome to React!</h1>;\n}\n\nexport default Welcome;",
+				language: 'js',
+				order: 1,
+				visibility: 'public'
+			},
+			{
+				lessonSlug: 'understanding-jsx',
+				title: 'JSX with Variables',
+				prompt:
+					"Create a component that uses JSX to display a user's name and age using variables.",
+				starterCode:
+					'import React from \'react\';\n\nfunction UserProfile() {\n  const name = "Alice";\n  const age = 30;\n  \n  // Your JSX here\n}\n\nexport default UserProfile;',
+				solutionCode:
+					'import React from \'react\';\n\nfunction UserProfile() {\n  const name = "Alice";\n  const age = 30;\n  \n  return (\n    <div>\n      <h2>Name: {name}</h2>\n      <p>Age: {age}</p>\n    </div>\n  );\n}\n\nexport default UserProfile;',
+				language: 'js',
+				order: 1,
+				visibility: 'public'
+			}
+		];
+
+	// Get all lessons to match exercises
+	const allLessons = dao.getFullList('lessons');
+
+		// Create exercises
+		for (const exercise of exercises) {
+			const lesson = allLessons.find((l) => l.slug === exercise.lessonSlug);
+			if (lesson) {
+			dao.createRecord('exercises', {
+					lesson: lesson.id,
+					title: exercise.title,
+					prompt: exercise.prompt,
+					starterCode: exercise.starterCode,
+					solutionCode: exercise.solutionCode,
+					language: exercise.language,
+					order: exercise.order,
+					visibility: exercise.visibility
+				});
+			}
+		}
+
+		console.log('✅ Created sample exercises');
+
+		// Create some sample checks for the exercises
+		const checks = [
+			{
+				exerciseTitle: 'Variable Declaration Practice',
+				type: 'assert',
+				expression:
+					'typeof greeting === "string" && typeof age === "number" && typeof isStudent === "boolean"',
+				points: 10,
+				order: 1
+			},
+			{
+				exerciseTitle: 'Type Checking',
+				type: 'stdout',
+				expression: 'number\\nstring\\nboolean',
+				points: 15,
+				order: 1
+			},
+			{
+				exerciseTitle: 'Create a Calculator Function',
+				type: 'assert',
+				expression: 'calculate(5, 3, "+") === 8 && calculate(10, 2, "/") === 5',
+				points: 20,
+				order: 1
+			}
+		];
+
+	// Get all exercises to match checks
+	const allExercises = dao.getFullList('exercises');
+
+		// Create checks
+		for (const check of checks) {
+			const exercise = allExercises.find((e) => e.title === check.exerciseTitle);
+			if (exercise) {
+			dao.createRecord('checks', {
+					exercise: exercise.id,
+					type: check.type,
+					expression: check.expression,
+					points: check.points,
+					order: check.order
+				});
+			}
+		}
+
+		console.log('✅ Created sample checks');
+
+		// Create some sample badges
+		const badges = [
+			{
+				key: 'first_lesson',
+				name: 'First Steps',
+				description: 'Complete your first lesson',
+				criteria: { type: 'lesson_complete', count: 1 }
+			},
+			{
+				key: 'javascript_basics',
+				name: 'JavaScript Basics',
+				description: 'Complete all JavaScript Fundamentals lessons',
+				criteria: { type: 'course_complete', course: 'javascript-fundamentals' }
+			},
+			{
+				key: 'react_beginner',
+				name: 'React Beginner',
+				description: 'Complete the React Development course',
+				criteria: { type: 'course_complete', course: 'react-development' }
+			},
+			{
+				key: 'code_master',
+				name: 'Code Master',
+				description: 'Complete 10 exercises successfully',
+				criteria: { type: 'exercise_complete', count: 10 }
+			}
+		];
+
+		for (const badge of badges) {
+		dao.createRecord('badges', {
+				key: badge.key,
+				name: badge.name,
+				description: badge.description,
+				criteria: badge.criteria
+			});
+		}
+
+		console.log('✅ Created sample badges');
+
+		console.log('\n🎉 Academy seed data creation completed successfully!');
+		console.log('📚 Created 2 courses with 6 modules and 24 lessons');
+		console.log('👨‍🏫 Instructor: instructor@academy.dev / instructor123');
+		console.log('🏆 Created sample exercises, checks, and badges');
+}, (db) => {
+	// DOWN: remove all seed data
+	const dao = $dbx;
+
+		// Delete in reverse dependency order
+		const collections = [
+			'achievements',
+			'badges',
+			'xp_events',
+			'progress',
+			'submissions',
+			'checks',
+			'exercises',
+			'lessons',
+			'modules',
+			'courses'
+		];
+
+	for (const collectionName of collections) {
+		const records = dao.getFullList(collectionName);
+		for (const record of records) {
+			dao.deleteRecord(collectionName, record.id);
+		}
+	}
+
+	// Delete instructor user
+	const users = dao.getFullList('users', { filter: 'email = "instructor@academy.dev"' });
+	for (const user of users) {
+		dao.deleteRecord('users', user.id);
+	}
+
+		console.log('🗑️  Seed data removed');
+	}
+);

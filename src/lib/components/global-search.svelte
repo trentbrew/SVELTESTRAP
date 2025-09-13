@@ -6,7 +6,8 @@
 	import type { NavItem } from '$lib/data/sidebar-data';
 	import { useSidebar } from '$lib/components/ui/sidebar/context.svelte.js';
 
-	let { items, showWorkspaceActions = true }: { items: NavItem[]; showWorkspaceActions?: boolean } = $props();
+	let { items, showWorkspaceActions = true }: { items: NavItem[]; showWorkspaceActions?: boolean } =
+		$props();
 
 	const sidebar = useSidebar();
 
@@ -28,6 +29,7 @@
 	// Current path for highlighting active item
 	let currentPath = $derived($page.url.pathname);
 
+	// Reactive state
 	let open = $state(false);
 	let searchQuery = $state('');
 
@@ -61,7 +63,7 @@
 <!-- Show different layouts based on sidebar state -->
 {#if sidebar.state === 'collapsed'}
 	<!-- Collapsed state: just the search icon -->
-	<div class="p-2">
+	<div class="translate-x-1 p-2">
 		<button
 			type="button"
 			class="flex w-full items-center justify-center rounded-md border bg-background/50 p-2 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-accent focus:ring-2 focus:ring-ring focus:outline-none"
@@ -81,7 +83,7 @@
 			aria-label="Open global search"
 		>
 			<SearchIcon class="size-4 opacity-70" />
-			<span class="flex-1 text-left">Search or jump to...</span>
+			<span class="flex-1 text-left">Search</span>
 			<kbd
 				class="pointer-events-none inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 select-none"
 			>

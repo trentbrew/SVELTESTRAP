@@ -10,8 +10,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
 	import { useSidebar } from '$lib/components/ui/sidebar/context.svelte.js';
-	import type { Icon } from '@tabler/icons-svelte';
-	import SearchIcon from '@tabler/icons-svelte/icons/search';
+	import { Icon } from '$lib/components/ui/icon/index.js';
 
 	let {
 		items,
@@ -19,13 +18,13 @@
 		class: className,
 		...restProps
 	}: {
-		items: { title: string; url: string; icon?: Icon }[];
+		items: { title: string; url: string; icon?: string }[];
 		title?: string;
-		I;
 		class?: string;
 	} = $props();
 
 	const sidebar = useSidebar();
+
 	let open = $state(true); // Default to open
 </script>
 
@@ -47,7 +46,7 @@
 				<Sidebar.Menu class="mt-0">
 					{#each items as item (item.title)}
 						{#if !pinnedItemsStore.isPinned(item.url)}
-							<Sidebar.MenuItem class="ml-4">
+							<Sidebar.MenuItem class={sidebar.state !== 'collapsed' ? 'ml-4' : ''}>
 								<Sidebar.MenuButton
 									tooltipContent={item.title}
 									isActive={$page.url.pathname.startsWith(item.url)}
@@ -55,7 +54,7 @@
 									{#snippet child({ props })}
 										<a href={item.url} {...props}>
 											{#if item.icon}
-												<item.icon class="mr-2 size-4 opacity-50" />
+												<Icon name={item.icon} class="mr-2 size-4 opacity-50" />
 											{/if}
 											{#if sidebar.state !== 'collapsed'}
 												<span>{item.title}</span>
@@ -73,7 +72,7 @@
 												type: 'main'
 											})}
 										showOnHover
-										class="data-[state=open]:bg-accent rounded-sm"
+										class="rounded-sm data-[state=open]:bg-accent"
 									>
 										{#if pinnedItemsStore.isPinned(item.url)}
 											<PinFilledIcon class="h-4 w-4" />
@@ -93,6 +92,6 @@
 
 	<!-- Add divider in collapsed mode -->
 	{#if sidebar.state === 'collapsed'}
-		<div class="bg-border mx-auto mt-4 h-px w-12 -translate-x-0"></div>
+		<div class="mx-auto mt-4 h-px w-12 -translate-x-0 bg-border"></div>
 	{/if}
 </Sidebar.Group>

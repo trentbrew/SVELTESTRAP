@@ -1,44 +1,9 @@
-import type { ComponentType, SvelteComponent } from 'svelte';
-import DashboardIcon from '@tabler/icons-svelte/icons/dashboard';
-import ChartBarIcon from '@tabler/icons-svelte/icons/chart-bar';
-import ReportIcon from '@tabler/icons-svelte/icons/report';
-import DatabaseIcon from '@tabler/icons-svelte/icons/database';
-import SettingsIcon from '@tabler/icons-svelte/icons/settings';
-import HelpIcon from '@tabler/icons-svelte/icons/help';
-import MessageIcon from '@tabler/icons-svelte/icons/message';
-import FileDescriptionIcon from '@tabler/icons-svelte/icons/file-description';
-// New icons aligned to PocketFlow
-import ShoppingCartIcon from '@tabler/icons-svelte/icons/shopping-cart';
-import TruckIcon from '@tabler/icons-svelte/icons/truck';
-import RotateIcon from '@tabler/icons-svelte/icons/rotate-2';
-import PackageIcon from '@tabler/icons-svelte/icons/package';
-import DownloadIcon from '@tabler/icons-svelte/icons/download';
-import PlugIcon from '@tabler/icons-svelte/icons/plug';
-import BoltIcon from '@tabler/icons-svelte/icons/bolt';
-import { registerIcon } from '$lib/stores/pinned-items.svelte.js';
 import { makeRoutes } from '$lib/routes';
-
-// Register all icons for serialization
-registerIcon('dashboard', DashboardIcon);
-registerIcon('chart-bar', ChartBarIcon);
-registerIcon('report', ReportIcon);
-registerIcon('database', DatabaseIcon);
-registerIcon('settings', SettingsIcon);
-registerIcon('help', HelpIcon);
-registerIcon('message', MessageIcon);
-registerIcon('file-description', FileDescriptionIcon);
-registerIcon('shopping-cart', ShoppingCartIcon);
-registerIcon('truck', TruckIcon);
-registerIcon('rotate-2', RotateIcon);
-registerIcon('package', PackageIcon);
-registerIcon('download', DownloadIcon);
-registerIcon('plug', PlugIcon);
-registerIcon('bolt', BoltIcon);
 
 export type NavItem = {
 	title: string;
 	url: string;
-	icon?: ComponentType<SvelteComponent>;
+	icon?: string;
 	isActive?: boolean;
 	description?: string;
 	items?: Array<{
@@ -66,7 +31,7 @@ export function getSidebarData(workspace: string) {
 	return {
 		// TODO: make user dynamic
 		user: {
-			name: 'PocketFlow Demo',
+			name: 'TurtleCode Demo',
 			email: 'demo@pocketflow.dev',
 			avatar:
 				'https://turtle-commerce.pockethost.io/api/files/oqyn1qmsatdm53w/th69qz07n9gsddr/avatar_DW57vH1BP3.png?token='
@@ -75,133 +40,109 @@ export function getSidebarData(workspace: string) {
 		workspaces: [
 			{
 				id: workspace,
-				name: 'PocketFlow',
-				logo: 'https://turtle-commerce.pockethost.io/api/files/oqyn1qmsatdm53w/phwvuxr87m2x8m2/group_5_DZDQTT6EPX.png?token=',
+				name: 'turtle_academy',
+				logo: 'https://academy.pockethost.io/api/files/n3xvlemfwmvfb26/c7jw60d2lytu1qs/a_g_iZZdwT8fUe.svg',
 				url: routes.dashboard,
 				isActive: true
 			}
 		] as Workspace[],
 		navMain: [
 			{
-				title: 'Dashboard',
+				title: 'Courses',
 				url: routes.dashboard,
-				icon: DashboardIcon,
+				icon: 'dashboard',
 				description: 'Live orders, shipments, failures, retry'
 			},
 			{
-				title: 'Orders',
+				title: 'Resources',
 				url: routes.orders,
-				icon: ShoppingCartIcon,
+				icon: 'book',
 				description: 'All orders from Webflow; statuses and actions'
 			},
 			{
-				title: 'Shipments',
+				title: 'Exercises',
 				url: routes.shipments,
-				icon: TruckIcon,
+				icon: 'brain',
 				description: 'Rates, labels, tracking via Shippo'
 			},
 			{
-				title: 'Returns',
+				title: 'Community',
 				url: routes.returns,
-				icon: RotateIcon,
+				icon: 'flame',
 				description: 'Initiate and track return shipments'
 			},
 			{
-				title: 'Products',
+				title: 'Arcade',
 				url: routes.products,
-				icon: PackageIcon,
+				icon: 'users',
 				description: 'Product catalog and SKU mapping'
-			},
-			{
-				title: 'Inventory',
-				url: routes.inventory,
-				icon: DatabaseIcon,
-				description: 'PocketFlow as SSoT; stock levels'
-			},
-			{
-				title: 'Downloads',
-				url: routes.downloads,
-				icon: DownloadIcon,
-				description: 'Digital delivery links and fulfillment'
-			},
-			{
-				title: 'Connectors',
-				url: routes.connectors,
-				icon: PlugIcon,
-				description: 'Webflow, Stripe (read-only), Shippo settings'
-			},
-			{
-				title: 'Jobs',
-				url: routes.jobs,
-				icon: BoltIcon,
-				description: 'Retries, reconcile tasks, job runs'
 			}
 		] as NavItem[],
 		navContent: [
 			{
 				title: 'Product Overview',
 				url: routes.docs.productOverview,
-				icon: FileDescriptionIcon,
-				description: 'What PocketFlow is and who it’s for'
+				icon: 'fileQuestion',
+				description: "What PocketFlow is and who it's for"
 			},
 			{
 				title: 'MVP Scope',
 				url: routes.docs.mvp,
-				icon: FileDescriptionIcon,
+				icon: 'fileQuestion',
 				description: 'Must-haves, nice-later, and out-of-scope'
 			},
 			{
 				title: 'Architecture',
 				url: routes.docs.architecture,
-				icon: FileDescriptionIcon,
+				icon: 'fileQuestion',
 				description: 'Hono API, PocketBase, and integrations'
 			},
 			{
 				title: 'Data Model',
 				url: routes.docs.dataModel,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: 'Collections and SSoT schema'
 			},
 			{
 				title: 'Core Flows',
 				url: routes.docs.coreFlows,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: 'Physical, digital, returns, status webhooks'
 			},
 			{
 				title: 'API Surface',
 				url: routes.docs.apiSurface,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: 'Webhooks, actions, and ops routes'
 			},
 			{
 				title: 'Integration Contracts',
 				url: routes.docs.integrationContracts,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: 'Webflow, Shippo, and writebacks'
 			},
 			{
 				title: 'Setup Wizard',
 				url: routes.docs.setup,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: '10-minute setup steps'
 			},
 			{
 				title: 'Pricing',
 				url: routes.docs.pricing,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: 'Simple plans aligned to value'
 			},
 			{
 				title: 'Go/No-Go',
 				url: routes.docs.goNoGo,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: 'Kill rules and latency notes'
 			},
 			{
 				title: 'Scaffold Next',
 				url: routes.docs.scaffoldNext,
-				icon: FileDescriptionIcon,
+				icon: 'fileText',
 				description: 'Adapters, routes, libs, observability'
 			}
 		] as NavItem[],
@@ -209,19 +150,19 @@ export function getSidebarData(workspace: string) {
 			{
 				title: 'Analytics',
 				url: routes.analytics,
-				icon: ChartBarIcon,
+				icon: 'chart',
 				description: 'Orders, shipments, fulfillment rates'
 			},
 			{
 				title: 'Job Runs',
 				url: routes.jobRuns,
-				icon: ReportIcon,
+				icon: 'barChart',
 				description: 'Background jobs, retries, and statuses'
 			},
 			{
 				title: 'Reconcile',
 				url: routes.reconcile,
-				icon: DatabaseIcon,
+				icon: 'database',
 				description: 'Compare Webflow vs SSoT and fix drifts'
 			}
 		] as NavItem[],
@@ -229,14 +170,19 @@ export function getSidebarData(workspace: string) {
 			{
 				title: 'Settings',
 				url: routes.settings,
-				icon: SettingsIcon,
+				icon: 'settings',
 				description: 'Account and workspace settings'
 			},
-			{ title: 'Help', url: routes.help, icon: HelpIcon, description: 'Help center and support' },
+			{
+				title: 'Help',
+				url: routes.help,
+				icon: 'help',
+				description: 'Help center and support'
+			},
 			{
 				title: 'Feedback',
 				url: routes.feedback,
-				icon: MessageIcon,
+				icon: 'messageSquare',
 				description: 'Share feedback about PocketFlow'
 			}
 		] as NavItem[]
